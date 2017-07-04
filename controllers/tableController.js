@@ -82,12 +82,16 @@
         .module('KendoDemos')
         .controller('MyCtrl', MyCtrl);
 
-    MyCtrl.$inject = []
+    MyCtrl.$inject = ['DataService']
 
-    function MyCtrl() {
+    function MyCtrl(DataService) {
         var vm = this;
         // vm.mainGridOptions = mainGridOptions;
         vm.detailGridOptions = detailGridOptions;
+
+        DataService.getVenueData().then(function(data) {
+            console.log('foursquare: ', data);
+        })
 
         vm.mainGridOptions = {
             dataSource: {
