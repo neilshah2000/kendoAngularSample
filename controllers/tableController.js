@@ -12,6 +12,7 @@
         vm.getPicture = getPicture;
         vm.removeItem = removeItem;
         vm.alphabetical = alphabetical;
+        vm.recomended = recomended;
         vm.searchTerm = 'london',
         vm.search = search
         vm.results = [];
