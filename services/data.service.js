@@ -10,6 +10,7 @@
     function DataService($http, $q) {
         var service = {
             getVenueData: getVenueData,
+            getPicture: getPicture,
             getMainMenu: getMainMenu,
             getData: getData,
             search: search,
@@ -28,12 +29,20 @@
 
         function getVenueData() {
             var def = $q.defer(),
-                url = 'https://api.foursquare.com/v2/venues/explore?near=london&oauth_token=CT0R0Q0KHYN23UNMR5SBZC22C4QCBXNOXQ0KYGQG4A3PGVSC&v=20170704';
+                url = 'https://api.foursquare.com/v2/venues/explore?near=london&venuePhotos=1&oauth_token=CT0R0Q0KHYN23UNMR5SBZC22C4QCBXNOXQ0KYGQG4A3PGVSC&v=20170704';
 
             $http.get(url).then(function(response) {
                 def.resolve(response.data.response);
             });
 
+            return def.promise;
+        }
+
+        function getPicture(venueId){
+            var def = $q.defer(),
+                url = 'https://igx.4sqi.net/img/user/300x500/RTFO4NIEAP505GWF.jpg';
+            console.log(venueId);
+            def.resolve(url);
             return def.promise;
         }
 

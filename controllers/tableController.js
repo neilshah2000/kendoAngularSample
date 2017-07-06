@@ -86,12 +86,32 @@
 
     function MyCtrl(DataService) {
         var vm = this;
-        // vm.mainGridOptions = mainGridOptions;
+
         vm.detailGridOptions = detailGridOptions;
+        vm.getPicture = getPicture;
+        vm.source = new kendo.data.DataSource({
+                transport: {
+                    read: function(options){
+                        DataService.getVenueData().then(function(results){
+                            options.success(results.groups[0].items);
+                        }).catch(function(error){
+                            options.error(error);
+                        })
+                    }
+                }
+            });
+                    
+    ////////////
+        
 
         DataService.getVenueData().then(function(data) {
-            console.log('foursquare: ', data);
+            console.log('foursquare: ', data.groups[0].items);
         })
+
+        function getPicture(venueId){
+            console.log(venueId);
+            return DataService.getPicture(venueId);
+        }
 
         vm.mainGridOptions = {
             dataSource: {

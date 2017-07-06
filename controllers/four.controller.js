@@ -9,7 +9,6 @@
 
     function fourController(DataService) {
         var vm = this;
-        // vm.mainGridOptions = mainGridOptions;
         vm.detailGridOptions = detailGridOptions;
 
         DataService.getVenueData().then(function(data) {
@@ -26,6 +25,8 @@
                 serverPaging: true,
                 serverSorting: true
             },
+            ""
+            ""
             sortable: true,
             pageable: true,
             dataBound: function() {
