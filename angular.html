@@ -3,48 +3,41 @@
 
 <head>
     <title></title>
-    <link rel="stylesheet" href="styles/kendo.common.min.css" />
-    <link rel="stylesheet" href="styles/kendo.default.min.css" />
-    <link rel="stylesheet" href="styles/kendo.default.mobile.min.css" />
 
-    <script src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
     <script src="js/angular.min.js"></script>
-    <script src="js/kendo.all.min.js"></script>
+
 
 </head>
 
 <body>
-    <div id="example" ng-app="KendoDemos">
+    <div id="example" class="container"  ng-app="KendoDemos">
         <div ng-controller="MyCtrl as vm">
-            <div kendo-list-view id="listView" k-data-source="vm.source">
-                <div class="product" k-template>
-                    <img ng-src="{{vm.getPicture(dataItem.venue)}}" alt=" {{dataItem.ProductName}} image" />
-                    <h3>{{ dataItem.venue.name }}</h3>
-                    <p>{{ dataItem.venue.rating }}</p>
+            <header class="search">
+                <input ng-model="vm.searchTerm"></input>
+                <button ng-click="vm.search()"> Search</button>
+                <button ng-click="vm.removeItem()"> Remove</button>
+                <button ng-click="vm.alphabetical()">Alphabetical</button>
+                <button ng-click="vm.recomended()">Recomended</button>
+            </header>
+            <div ng-repeat="result in vm.results">
+                <div class="result col-md-4">
+                    <div class="image">
+                        <img ng-src="{{vm.getPicture(result.venue.photos)}}" alt=" {{result.venue.name}} image" />
+                    </div>
+                    <div class="detail">
+                        <h3>{{ result.venue.name }}</h3>
+                        <p>{{ result.tips[0].text }}</p>
+                        <a href="{{ result.venue.url }}">link</a>
+                        <p>{{ result.venue.rating }}</p>
+                    </div>
                 </div>
             </div>
-            <div kendo-pager k-data-source="vm.source"></div>
         </div>
     </div>
 
-    <style>
-        .contact-info-form {
-            list-style-type: none;
-            margin: 30px 0;
-            padding: 0;
-        }
-        
-        .contact-info-form li {
-            margin: 10px 0;
-        }
-        
-        .contact-info-form label {
-            display: inline-block;
-            width: 100px;
-            text-align: right;
-            font-weight: bold;
-        }
-    </style>
     <script src="app.js"></script>
     <script src="controllers/tableController.js"></script>
     <script src="services/data.service.js"></script>

@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    angular.module('KendoDemos', ["kendo.directives"])
+    angular.module('KendoDemos', [])
 
 
 })();

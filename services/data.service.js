@@ -27,9 +27,10 @@
 
         ////////////
 
-        function getVenueData() {
+        function getVenueData(searchTerm) {
+            console.log(searchTerm);
             var def = $q.defer(),
-                url = 'https://api.foursquare.com/v2/venues/explore?near=london&venuePhotos=1&oauth_token=CT0R0Q0KHYN23UNMR5SBZC22C4QCBXNOXQ0KYGQG4A3PGVSC&v=20170704';
+                url = 'https://api.foursquare.com/v2/venues/explore?near=' + searchTerm + '&venuePhotos=1&oauth_token=CT0R0Q0KHYN23UNMR5SBZC22C4QCBXNOXQ0KYGQG4A3PGVSC&v=20170704';
 
             $http.get(url).then(function(response) {
                 def.resolve(response.data.response);

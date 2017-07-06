@@ -1,83 +1,6 @@
 (function() {
     'use strict';
 
-    // angular.module("KendoDemos")
-    //     .controller("MyCtrl", function() {
-    //         var vm = this;
-    //         vm.mainGridOptions = {
-    //             dataSource: {
-    //                 type: "odata",
-    //                 transport: {
-    //                     read: "https://demos.telerik.com/kendo-ui/service/Northwind.svc/Employees"
-    //                 },
-    //                 pageSize: 5,
-    //                 serverPaging: true,
-    //                 serverSorting: true
-    //             },
-    //             sortable: true,
-    //             pageable: true,
-    //             dataBound: function() {
-    //                 this.expandRow(this.tbody.find("tr.k-master-row").first());
-    //             },
-    //             columns: [{
-    //                 field: "FirstName",
-    //                 title: "First Name",
-    //                 width: "120px"
-    //             }, {
-    //                 field: "LastName",
-    //                 title: "Last Name",
-    //                 width: "120px"
-    //             }, {
-    //                 field: "Country",
-    //                 width: "120px"
-    //             }, {
-    //                 field: "City",
-    //                 width: "120px"
-    //             }, {
-    //                 field: "Title"
-    //             }]
-    //         };
-
-    //         vm.detailGridOptions = function(dataItem) {
-    //             return {
-    //                 dataSource: {
-    //                     type: "odata",
-    //                     transport: {
-    //                         read: "https://demos.telerik.com/kendo-ui/service/Northwind.svc/Orders"
-    //                     },
-    //                     serverPaging: true,
-    //                     serverSorting: true,
-    //                     serverFiltering: true,
-    //                     pageSize: 5,
-    //                     filter: {
-    //                         field: "EmployeeID",
-    //                         operator: "eq",
-    //                         value: dataItem.EmployeeID
-    //                     }
-    //                 },
-    //                 scrollable: false,
-    //                 sortable: true,
-    //                 pageable: true,
-    //                 columns: [{
-    //                     field: "OrderID",
-    //                     title: "ID",
-    //                     width: "56px"
-    //                 }, {
-    //                     field: "ShipCountry",
-    //                     title: "Ship Country",
-    //                     width: "110px"
-    //                 }, {
-    //                     field: "ShipAddress",
-    //                     title: "Ship Address"
-    //                 }, {
-    //                     field: "ShipName",
-    //                     title: "Ship Name",
-    //                     width: "190px"
-    //                 }]
-    //             };
-    //         };
-    //     })
-
     angular
         .module('KendoDemos')
         .controller('MyCtrl', MyCtrl);
@@ -86,104 +9,53 @@
 
     function MyCtrl(DataService) {
         var vm = this;
-
-        vm.detailGridOptions = detailGridOptions;
         vm.getPicture = getPicture;
-        vm.source = new kendo.data.DataSource({
-                transport: {
-                    read: function(options){
-                        DataService.getVenueData().then(function(results){
-                            options.success(results.groups[0].items);
-                        }).catch(function(error){
-                            options.error(error);
-                        })
-                    }
-                }
-            });
-                    
-    ////////////
-        
+        vm.removeItem = removeItem;
+        vm.alphabetical = alphabetical;
+        vm.searchTerm = 'london',
+        vm.search = search
+        vm.results = [];
 
-        DataService.getVenueData().then(function(data) {
-            console.log('foursquare: ', data.groups[0].items);
-        })
+        activate();
+        ////////////
 
-        function getPicture(venueId){
-            console.log(venueId);
-            return DataService.getPicture(venueId);
+        function activate(){
+            search();
         }
 
-        vm.mainGridOptions = {
-            dataSource: {
-                type: "odata",
-                transport: {
-                    read: "https://demos.telerik.com/kendo-ui/service/Northwind.svc/Employees"
-                },
-                pageSize: 5,
-                serverPaging: true,
-                serverSorting: true
-            },
-            sortable: true,
-            pageable: true,
-            dataBound: function() {
-                this.expandRow(this.tbody.find("tr.k-master-row").first());
-            },
-            columns: [{
-                field: "FirstName",
-                title: "First Name",
-                width: "120px"
-            }, {
-                field: "LastName",
-                title: "Last Name",
-                width: "120px"
-            }, {
-                field: "Country",
-                width: "120px"
-            }, {
-                field: "City",
-                width: "120px"
-            }, {
-                field: "Title"
-            }]
-        };
+        function getPicture(photos){
+            var photoItem = photos.groups[0].items[0];
+            var url = photoItem.prefix + '100x100' + photoItem.suffix;
+            return url;
+        }
 
-        function detailGridOptions(dataItem) {
-            return {
-                dataSource: {
-                    type: "odata",
-                    transport: {
-                        read: "https://demos.telerik.com/kendo-ui/service/Northwind.svc/Orders"
-                    },
-                    serverPaging: true,
-                    serverSorting: true,
-                    serverFiltering: true,
-                    pageSize: 5,
-                    filter: {
-                        field: "EmployeeID",
-                        operator: "eq",
-                        value: dataItem.EmployeeID
-                    }
-                },
-                scrollable: false,
-                sortable: true,
-                pageable: true,
-                columns: [{
-                    field: "OrderID",
-                    title: "ID",
-                    width: "56px"
-                }, {
-                    field: "ShipCountry",
-                    title: "Ship Country",
-                    width: "110px"
-                }, {
-                    field: "ShipAddress",
-                    title: "Ship Address"
-                }, {
-                    field: "ShipName",
-                    title: "Ship Name",
-                    width: "190px"
-                }]
-            };
+        function removeItem(){
+            vm.results.pop();
+            console.log(vm.results);
+        }
+
+        function alphabetical(){
+            vm.results.sort(alphabeticalCompare);
+
+            function alphabeticalCompare(r1, r2){
+                if(r1.venue.name < r2.venue.name) return -1;
+                else return 1;
+            }
+        }
+
+        function recomended(){
+            vm.results.sort(recomendedCompare);
+
+            function recomendedCompare(r1, r2){
+                return (r2.venue.rating - r1.venue.rating)*10;
+            }
+        }
+
+        function search(searchItem){
+            DataService.getVenueData(vm.searchTerm).then(function(response){
+                console.log(response.groups[0].items)
+                vm.results = response.groups[0].items;
+            })
         }
     }
 
